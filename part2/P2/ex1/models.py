@@ -4,38 +4,6 @@ from pytorch_lightning import LightningModule
 import torch
 from torch import nn
 from torchmetrics import Accuracy
-import torch.optim as optim
-
-
-def generate_net(name):
-    bootleneck = torchvision.models.resnet.Bottleneck
-    basic = torchvision.models.resnet.BasicBlock
-
-    if name.startswith('resnet'):
-        if name == 'resnet18':
-            layers = [2, 2, 2, 2]
-            block = basic
-        elif name == 'resnet34':
-            layers = [3, 4, 6, 3]
-            block = basic
-        elif name == 'resnet50':
-            layers = [3, 4, 6, 3]
-            block = bootleneck
-        elif name == 'resnet101':
-            layers = [3, 4, 23, 3]
-            block = bootleneck
-        elif name == 'resnet150':
-            layers = [3, 8, 36, 3]
-            block = bootleneck
-        else:
-            raise KeyError(f'Not such model {name}')
-        model = resnet.ResNet(block=block, num_classes=10, layers=layers)
-    elif name.startswith('densenet'):
-        pass
-    else:
-        KeyError(f'Not such model {name}')
-
-    return model
 
 
 class GenericNet(LightningModule):
@@ -51,7 +19,7 @@ class GenericNet(LightningModule):
         self.epoch = 0
 
     def init_model(self):
-        self.model = generate_net(self.config['class'])
+        self.model = self.config['class'](**self.config['params'])
         self.loss = nn.CrossEntropyLoss()
 
     def forward(self, x):
@@ -67,7 +35,7 @@ class GenericNet(LightningModule):
         y_hat = torch.argmax(logits, dim=1)
         acc = self.accuracy(y, y_hat)
 
-        self.logger.log_metrics({f'loss_{phase}': loss, f'acc_{phase}': acc}, step=self.trainer.global_step)
+        # self.logger.log_metrics({f'loss_{phase}': loss, f'acc_{phase}': acc}, step=self.trainer.global_step)
 
         output = {'loss': loss, 'acc': acc}
 
