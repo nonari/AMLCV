@@ -15,15 +15,17 @@ class MetricTracker(Callback):
         self.validation_scores.append(pl_module.val_epoch_results[-1])
 
 
+checkpoint = pl.callbacks.ModelCheckpoint(CONFIG['checkpoint'])
+
 dataset = MNISTDataModule(CONFIG['dataset'])
 
 model = GenericNet(CONFIG['model'])
 
 logconf = CONFIG['log']
 
-cb = MetricTracker()
+metric_tracker = MetricTracker()
 
 logger = TensorBoardLogger(logconf['root'], name=logconf['name'])
-trainer = Trainer(accelerator='gpu', gpus=1, logger=logger, callbacks=[cb])
+trainer = Trainer(accelerator='cpu', logger=logger, callbacks=[metric_tracker, checkpoint])
 
 trainer.fit(model, datamodule=dataset)

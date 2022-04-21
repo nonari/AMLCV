@@ -5,14 +5,23 @@ import torchvision.transforms as transforms
 from torch.utils.data import random_split, DataLoader
 
 
-transform = transforms.Compose(
+normal_transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize(mean=(0.1307,), std=(0.3081,))])
 
+augmentation_transform = [
+    transforms.Compose([
+        transforms.ToTensor(),
+        transforms.RandomAffine([-10, 10], translate=[0.1, 0.1], scale=[0.9, 1.1]),
+        transforms.Normalize(mean=0.1307, std=0.3081)
+    ])
+]
 
-def mnist(train=True):
+
+def mnist(train=True, augmentation=False):
     root = 'data/'
 
+    transform = augmentation_transform if augmentation else normal_transform
     dataset = torchvision.datasets.MNIST(root=root, train=train, download=True, transform=transform)
 
     return dataset

@@ -20,6 +20,9 @@ class GenericNet(LightningModule):
 
     def init_model(self):
         self.model = self.config['class'](**self.config['params'])
+        old_weight = self.model.conv1.weight.sum(dim=1, keepdim=True)
+        self.model.conv1 = nn.Conv2d(1, self.model.inplanes, kernel_size=(7, 7), stride=(2, 2), padding=3, bias=False)
+        self.model.conv1.weight.data = old_weight
         self.loss = nn.CrossEntropyLoss()
 
     def forward(self, x):
