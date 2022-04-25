@@ -1,0 +1,55 @@
+import importlib
+from pytorch_lightning import Trainer, Callback
+import pytorch_lightning as pl
+from pytorch_lightning.loggers import TensorBoardLogger
+from datasets import MNISTDataModule
+from models import GenericNet
+import torch
+
+
+
+def test(config_name, version=0):
+    CONFIG = importlib.import_module(f'configs.{config_name}').CONFIG
+
+    dataset = MNISTDataModule(CONFIG['dataset'])
+
+    dir_conf = CONFIG['log']
+    root = dir_conf['root']
+    name = dir_conf['name']
+
+    model_config = CONFIG['model']
+
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.devide('cpu')
+
+    model = model_config['class'](**model_config['params'])
+
+    saved_state = torch.load(f'{root}/{name}/version_{version}/best.ckpt')
+
+    model.load_state_dict(dict([(n[6:], p) for n, p in saved_state['state_dict'].items()]), strict=True)
+
+    # model.load_state_dict(saved_state['state_dict'])
+    model.eval()
+    model.to(device)
+
+    iterations = 0
+    val_accuracy = 0
+    for images, targets in dataset.test_dataloader():
+        images = images.to(device)
+        targets = targets.to(device)
+
+        with torch.no_grad():
+            logits = model(images)
+
+            iterations += 1
+
+            preds = torch.argmax(logits, dim=1).flatten()
+
+            val_accuracy += (preds == targets.flatten()).sum().item()
+
+    print()
+
+    val_accuracy /= iterations*CONFIG['dataset']['batch_test']
+    print(val_accuracy)
+
+
+test('config_resnet18', version=1)

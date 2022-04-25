@@ -1,5 +1,9 @@
 import torch
 import torchvision
+import sys
+sys.path.insert(0, '..')
+from resnet import ResNetGray
+
 
 CONFIG = {
     'log': {
@@ -17,7 +21,7 @@ CONFIG = {
         'every_n_epochs': 10,
     },
     'model': {
-        'class': torchvision.models.ResNet,
+        'class': ResNetGray,
         'params': {
             'block': torchvision.models.resnet.Bottleneck,
             'layers': [3, 4, 6, 3],
