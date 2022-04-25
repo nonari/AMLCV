@@ -9,13 +9,23 @@ from models import GenericNet
 class MetricTracker(Callback):
     def __init__(self):
         self.validation_scores = []
+        self.best = 9999
+
+    def on_validation_epoch_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
+        score = pl_module.val_epoch_results[-1]
+        if self.best > score:
+            self.best = score
+            version = trainer.logger.version
+            save_dir = trainer.logger.save_dir
+            name = trainer.logger.name
+            trainer.save_checkpoint(f'{save_dir}/{name}/version_{version}/best.ckpt')
 
     def on_fit_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
         print(f'Callback: {pl_module.val_epoch_results}')
         self.validation_scores.append(pl_module.val_epoch_results[-1])
 
 
-def train(config_name, reload=False):
+def train(config_name, resume=False, version=0):
     CONFIG = importlib.import_module(f'configs.{config_name}').CONFIG
 
     checkpoint = pl.callbacks.ModelCheckpoint(**CONFIG['checkpoint'])
@@ -29,6 +39,15 @@ def train(config_name, reload=False):
     metric_tracker = MetricTracker()
 
     logger = TensorBoardLogger(logconf['root'], name=logconf['name'])
-    trainer = Trainer(accelerator='cpu', logger=logger, callbacks=[metric_tracker, checkpoint])
+
+    checkpoint_route = None
+    if resume:
+        checkpoint_route = f'{logconf["root"]}/{logconf["name"]}/version_{version}/last.ckpt'
+
+    trainer = Trainer(accelerator='cpu', logger=logger, callbacks=[metric_tracker, checkpoint],
+                      resume_from_checkpoint=checkpoint_route)
 
     trainer.fit(model, datamodule=dataset)
+
+
+train('config_resnet18', resume=False, version=1)
