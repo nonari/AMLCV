@@ -1,9 +1,9 @@
+import importlib
 from pytorch_lightning import Trainer, Callback
 import pytorch_lightning as pl
 from pytorch_lightning.loggers import TensorBoardLogger
 from datasets import MNISTDataModule
 from models import GenericNet
-from config import CONFIG
 
 
 class MetricTracker(Callback):
@@ -15,17 +15,20 @@ class MetricTracker(Callback):
         self.validation_scores.append(pl_module.val_epoch_results[-1])
 
 
-checkpoint = pl.callbacks.ModelCheckpoint(CONFIG['checkpoint'])
+def train(config_name, reload=False):
+    CONFIG = importlib.import_module(f'configs.{config_name}').CONFIG
 
-dataset = MNISTDataModule(CONFIG['dataset'])
+    checkpoint = pl.callbacks.ModelCheckpoint(**CONFIG['checkpoint'])
 
-model = GenericNet(CONFIG['model'])
+    dataset = MNISTDataModule(CONFIG['dataset'])
 
-logconf = CONFIG['log']
+    model = GenericNet(CONFIG['model'])
 
-metric_tracker = MetricTracker()
+    logconf = CONFIG['log']
 
-logger = TensorBoardLogger(logconf['root'], name=logconf['name'])
-trainer = Trainer(accelerator='cpu', logger=logger, callbacks=[metric_tracker, checkpoint])
+    metric_tracker = MetricTracker()
 
-trainer.fit(model, datamodule=dataset)
+    logger = TensorBoardLogger(logconf['root'], name=logconf['name'])
+    trainer = Trainer(accelerator='cpu', logger=logger, callbacks=[metric_tracker, checkpoint])
+
+    trainer.fit(model, datamodule=dataset)
