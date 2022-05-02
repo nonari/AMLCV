@@ -33,13 +33,12 @@ class Up(nn.Module):
     def __init__(self, in_channels):
         super().__init__()
         out_channels = in_channels // 2
-        self.up = nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
-        self.conv_up = nn.Conv2d(in_channels, out_channels, padding='same', kernel_size=(2, 2))
+        self.up = nn.ConvTranspose2d(in_channels, in_channels//2, kernel_size=(2, 2), stride=(2, 2))
         self.conv = ConvolveTwice(in_channels, out_channels)
 
     def forward(self, x_r, x_l):
         x_r = self.up(x_r)
-        x_r = self.conv_up(x_r)
+
         diff_y = x_l.size()[2] - x_r.size()[2]
         diff_x = x_l.size()[3] - x_r.size()[3]
         x_r = F.pad(x_r, [diff_x // 2, diff_x - diff_x // 2,

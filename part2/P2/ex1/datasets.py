@@ -7,7 +7,9 @@ from torch.utils.data import random_split, DataLoader
 
 normal_transform = transforms.Compose(
     [transforms.ToTensor(),
-     transforms.Normalize(mean=(0.1307,), std=(0.3081,))])
+     transforms.Normalize(mean=(0.1307,), std=(0.3081,)),
+     transforms.Resize((56, 56), interpolation=transforms.InterpolationMode.NEAREST),
+     transforms.Pad(98)])
 
 augmentation_transform = [
     transforms.Compose([

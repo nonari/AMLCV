@@ -23,8 +23,6 @@ CONFIG = {
     'model': {
         'class': ResNetGray,
         'params': {
-            'block': torchvision.models.resnet.Bottleneck,
-            'layers': [3, 4, 6, 3],
             'num_classes': 10
         },
         'optimizer': {

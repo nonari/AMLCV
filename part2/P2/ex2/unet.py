@@ -1,9 +1,9 @@
-from unet_modules_padding import *
+from unet_modules import *
 
 
 class UNet(nn.Module):
     def __init__(self, n_classes):
-        super(UNet, self).__init__()
+        super().__init__()
 
         self.lv0 = ConvolveTwice(1, 64)
         self.down1 = Down(64, 128)

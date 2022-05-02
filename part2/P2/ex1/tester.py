@@ -33,6 +33,7 @@ def test(config_name, version=0):
 
     iterations = 0
     val_accuracy = 0
+    datapoints = 0
     for images, targets in dataset.test_dataloader():
         images = images.to(device)
         targets = targets.to(device)
@@ -43,12 +44,12 @@ def test(config_name, version=0):
             iterations += 1
 
             preds = torch.argmax(logits, dim=1).flatten()
-
+            datapoints += preds.shape[0]
             val_accuracy += (preds == targets.flatten()).sum().item()
 
     print()
 
-    val_accuracy /= iterations*CONFIG['dataset']['batch_test']
+    val_accuracy /= datapoints
     print(val_accuracy)
 
 
