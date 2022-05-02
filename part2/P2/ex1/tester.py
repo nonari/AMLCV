@@ -53,4 +53,4 @@ def test(config_name, version=0):
     print(val_accuracy)
 
 
-test('config_resnet18', version=1)
+# test('config_resnet18', version=1)
