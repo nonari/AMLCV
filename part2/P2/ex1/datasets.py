@@ -38,7 +38,8 @@ class MNISTDataModule(LightningDataModule):
 
     # Override
     def train_dataloader(self):
-        dataset = mnist(train=True)
+        augment = self.config['augment']
+        dataset = mnist(train=True, augmentation=augment)
         # t, _ = torch.utils.data.random_split(dataset, [16, 59984])
         return DataLoader(dataset, batch_size=self.config['batch_train'])
 
@@ -46,7 +47,7 @@ class MNISTDataModule(LightningDataModule):
     def val_dataloader(self):
         dataset = mnist(train=False)
         # val, val_set = torch.utils.data.random_split(dataset, [16, 9984])
-        _, val_set = torch.utils.data.random_split(dataset, [7000, 3000])
+        _, val_set = torch.utils.data.random_split(dataset, [5000, 5000])
         return DataLoader(val_set, batch_size=self.config['batch_train'])
 
     # Override
@@ -54,5 +55,5 @@ class MNISTDataModule(LightningDataModule):
         dataset = mnist(train=False)
         if not self.validation:
             return DataLoader(dataset)
-        test_set, _ = torch.utils.data.random_split(dataset, [7000, 3000])
+        test_set, _ = torch.utils.data.random_split(dataset, [5000, 5000])
         return DataLoader(test_set, batch_size=self.config['batch_train'])

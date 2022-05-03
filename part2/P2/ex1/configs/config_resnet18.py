@@ -1,5 +1,4 @@
 import torch
-import torchvision
 import sys
 sys.path.insert(0, '..')
 from resnet import ResNetGray
@@ -14,6 +13,7 @@ CONFIG = {
         'batch_train': 4,
         'batch_test': 4,
         'validation': True,
+        'augment': True
     },
     'checkpoint': {
         'dirpath': None,

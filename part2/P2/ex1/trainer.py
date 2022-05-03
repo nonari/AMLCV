@@ -25,11 +25,15 @@ class MetricTracker(Callback):
         self.validation_scores.append(pl_module.val_epoch_results[-1])
 
 
-def train(config_name, resume=False, version=0):
+def train(config_name, resume=False, version=0, batch=None, check_path=None):
     CONFIG = importlib.import_module(f'configs.{config_name}').CONFIG
 
+    if check_path is not None:
+        CONFIG['checkpoint']['dirpath'] = check_path
     checkpoint = pl.callbacks.ModelCheckpoint(**CONFIG['checkpoint'])
 
+    if batch is not None:
+        CONFIG['dataset']['batch_train'] = batch
     dataset = MNISTDataModule(CONFIG['dataset'])
 
     model = GenericNet(CONFIG['model'])
