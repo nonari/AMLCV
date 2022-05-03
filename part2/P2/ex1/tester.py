@@ -57,4 +57,4 @@ def test(config_name, check_path=None, batch=4, version=0):
     print(val_accuracy)
 
 
-test('resnet18_pre_aug', version=0)
+# test('resnet18_pre_aug', version=0)
