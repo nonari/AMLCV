@@ -23,7 +23,8 @@ CONFIG = {
     'model': {
         'class': ResNetGray,
         'params': {
-            'num_classes': 10
+            'num_classes': 10,
+            'pretrained': False
         },
         'optimizer': {
             'class': torch.optim.SGD,
