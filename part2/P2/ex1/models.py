@@ -69,6 +69,7 @@ class GenericNet(LightningModule):
             self.val_epoch_results.append(acc.item())
 
         print(f'\n\n\nEpoch {self.current_epoch} {phase} loss: {loss}\n')
+        print(f'\n\n\nEpoch {self.current_epoch} {phase} acc: {acc}\n')
 
     # Override
     def training_epoch_end(self, training_step_outputs):
