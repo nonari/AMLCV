@@ -8,9 +8,13 @@ import torch
 
 
 
-def test(config_name, version=0):
+def test(config_name, check_path=None, batch=4, version=0):
     CONFIG = importlib.import_module(f'configs.{config_name}').CONFIG
 
+    if check_path is not None:
+        CONFIG['log']['root'] = check_path
+    if batch is not None:
+        CONFIG['dataset']['batch_train'] = batch
     dataset = MNISTDataModule(CONFIG['dataset'])
 
     dir_conf = CONFIG['log']

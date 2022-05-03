@@ -15,7 +15,7 @@ def args():
     parsed_args = argument_parser.parse_args()
 
     if parsed_args.test is not None:
-        test(parsed_args.config, parsed_args.version)
+        test(parsed_args.config, parsed_args.checkpath, parsed_args.batch, parsed_args.version)
     else:
         train(parsed_args.config, parsed_args.resume is not None, parsed_args.version, parsed_args.batch,
               parsed_args.checkpath)
