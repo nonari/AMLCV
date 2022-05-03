@@ -29,7 +29,7 @@ def train(config_name, resume=False, version=0, batch=None, check_path=None):
     CONFIG = importlib.import_module(f'configs.{config_name}').CONFIG
 
     if check_path is not None:
-        CONFIG['checkpoint']['dirpath'] = check_path
+        CONFIG['log']['root'] = check_path
     checkpoint = pl.callbacks.ModelCheckpoint(**CONFIG['checkpoint'])
 
     if batch is not None:
@@ -48,7 +48,7 @@ def train(config_name, resume=False, version=0, batch=None, check_path=None):
     if resume:
         checkpoint_route = f'{logconf["root"]}/{logconf["name"]}/version_{version}/last.ckpt'
 
-    trainer = Trainer(accelerator='cpu', logger=logger, callbacks=[metric_tracker, checkpoint],
+    trainer = Trainer(accelerator='gpu', logger=logger, callbacks=[metric_tracker, checkpoint],
                       resume_from_checkpoint=checkpoint_route)
 
     trainer.fit(model, datamodule=dataset)
