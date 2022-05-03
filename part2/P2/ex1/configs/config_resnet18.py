@@ -7,7 +7,7 @@ from resnet import ResNetGray
 CONFIG = {
     'log': {
         'root': '.tb_logs',
-        'name': 'resnet18'
+        'name': 'resnet18_pre_aug'
     },
     'dataset': {
         'batch_train': 4,
