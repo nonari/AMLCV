@@ -16,7 +16,6 @@ class GenericNet(LightningModule):
         self.loss = None
         self.accuracy = Accuracy()
         self.init_model()
-        self.epoch = 0
 
     def init_model(self):
         self.model = self.config['class'](**self.config['params'])
@@ -69,12 +68,11 @@ class GenericNet(LightningModule):
         if phase == 'validation':
             self.val_epoch_results.append(acc.item())
 
-        print(f'\n\n\nEpoch {self.epoch} {phase} loss: {loss}\n')
+        print(f'\n\n\nEpoch {self.current_epoch} {phase} loss: {loss}\n')
 
     # Override
     def training_epoch_end(self, training_step_outputs):
         self.do_epoch_end(training_step_outputs, 'train')
-        self.epoch += 1
 
     # Override
     def validation_epoch_end(self, validation_step_outputs):

@@ -30,6 +30,7 @@ def train(config_name, resume=False, version=0, batch=None, check_path=None):
 
     if check_path is not None:
         CONFIG['log']['root'] = check_path
+    print(CONFIG['log']['root'])
     checkpoint = pl.callbacks.ModelCheckpoint(**CONFIG['checkpoint'])
 
     if batch is not None:
@@ -49,9 +50,9 @@ def train(config_name, resume=False, version=0, batch=None, check_path=None):
         checkpoint_route = f'{logconf["root"]}/{logconf["name"]}/version_{version}/last.ckpt'
 
     trainer = Trainer(accelerator='gpu', logger=logger, callbacks=[metric_tracker, checkpoint],
-                      resume_from_checkpoint=checkpoint_route)
+                      resume_from_checkpoint=checkpoint_route, max_epochs=10)
 
     trainer.fit(model, datamodule=dataset)
 
 
-train('config_resnet18', resume=False, version=1)
+# train('config_resnet18', resume=False, version=1, check_path='none')

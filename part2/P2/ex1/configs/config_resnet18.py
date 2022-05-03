@@ -32,9 +32,10 @@ CONFIG = {
                 'momentum': 0.9
             },
             'lr_scheduler': {
-                'class': torch.optim.lr_scheduler.CosineAnnealingWarmRestarts,
+                'class': torch.optim.lr_scheduler.CyclicLR,
                 'params': {
-                    'T_0': 10,
+                    'base_lr': 0.0001,
+                    'max_lr': 0.01
                 },
             }
         },
