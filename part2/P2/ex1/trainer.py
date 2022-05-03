@@ -9,11 +9,10 @@ from models import GenericNet
 class MetricTracker(Callback):
     def __init__(self):
         self.validation_scores = []
-        self.best = 9999
+        self.best = 0
 
     def on_validation_epoch_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
         score = pl_module.val_epoch_results[-1]
-        print(f'New score: {score}')
         if score > self.best:
             self.best = score
             version = trainer.logger.version
