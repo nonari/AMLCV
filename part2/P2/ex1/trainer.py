@@ -51,7 +51,7 @@ def train(config_name, resume=False, version=0, batch=None, check_path=None):
         checkpoint_route = f'{logconf["root"]}/{logconf["name"]}/version_{version}/best.ckpt'
 
     trainer = Trainer(accelerator='gpu', logger=logger, callbacks=[metric_tracker, checkpoint],
-                      resume_from_checkpoint=checkpoint_route, max_epochs=10)
+                      resume_from_checkpoint=checkpoint_route, max_epochs=20)
 
     trainer.fit(model, datamodule=dataset)
 
