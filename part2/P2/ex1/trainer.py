@@ -13,6 +13,7 @@ class MetricTracker(Callback):
 
     def on_validation_epoch_end(self, trainer: "pl.Trainer", pl_module: "pl.LightningModule") -> None:
         score = pl_module.val_epoch_results[-1]
+        print(f'New score: {score}')
         if self.best > score:
             self.best = score
             version = trainer.logger.version

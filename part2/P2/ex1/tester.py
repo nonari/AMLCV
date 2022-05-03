@@ -23,7 +23,7 @@ def test(config_name, check_path=None, batch=4, version=0):
 
     model_config = CONFIG['model']
 
-    device = torch.device('cuda') if torch.cuda.is_available() else torch.devide('cpu')
+    device = torch.device('cpu') if torch.cuda.is_available() else torch.devide('cpu')
 
     model = model_config['class'](**model_config['params'])
 
@@ -57,4 +57,4 @@ def test(config_name, check_path=None, batch=4, version=0):
     print(val_accuracy)
 
 
-# test('config_resnet18', version=1)
+test('resnet18_pre_aug', version=0)
