@@ -54,4 +54,4 @@ def train(config_name, resume=False, version=0, batch=None, check_path=None):
     trainer.fit(model, datamodule=dataset)
 
 
-# train('config_resnet18', resume=False, version=1)
+train('config_resnet18', resume=False, version=1)

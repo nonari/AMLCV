@@ -11,13 +11,11 @@ normal_transform = transforms.Compose(
      transforms.Resize((56, 56), interpolation=transforms.InterpolationMode.NEAREST),
      transforms.Pad(98)])
 
-augmentation_transform = [
-    transforms.Compose([
+augmentation_transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.RandomAffine([-10, 10], translate=[0.1, 0.1], scale=[0.9, 1.1]),
         transforms.Normalize(mean=0.1307, std=0.3081)
     ])
-]
 
 
 def mnist(train=True, augmentation=False):
