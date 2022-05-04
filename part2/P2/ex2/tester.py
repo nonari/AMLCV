@@ -55,8 +55,8 @@ def test(config_name, check_path=None, batch=4, version=0):
             preds = torch.argmax(logits, dim=1).flatten()
             datapoints += preds.shape[0]
             val_accuracy += (preds.flatten() == targets.flatten()).sum().item()
-            all_preds = np.concatenate((all_preds, softmax(logits).detach().numpy()))
-            all_targets = np.concatenate((all_targets, targets.detach().numpy()))
+            all_preds = np.concatenate((all_preds, softmax(logits).detach().cpu().numpy()))
+            all_targets = np.concatenate((all_targets, targets.detach().cpu().numpy()))
 
     print()
 
