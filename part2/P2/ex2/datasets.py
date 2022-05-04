@@ -99,7 +99,7 @@ class DataModule(LightningDataModule):
     # Override
     def train_dataloader(self):
         dataset = SegmentationMNIST(root="./data", train=True, transform=sample_transform)
-        return DataLoader(dataset, batch_size=self.config['batch_train'])
+        return DataLoader(dataset, batch_size=self.config['batch_train'], num_workers=4)
 
     # Override
     def val_dataloader(self):
