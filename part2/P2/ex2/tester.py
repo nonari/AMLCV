@@ -25,7 +25,7 @@ def test(config_name, check_path=None, batch=4, version=0):
 
     model_config = CONFIG['model']
 
-    device = torch.device('gpu') if torch.cuda.is_available() else torch.device('cpu')
+    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 
     model = model_config['class'](**model_config['params'])
 
