@@ -14,7 +14,6 @@ class GenericNet(LightningModule):
         self.config = config
         self.model = None
         self.loss = None
-        self.accuracy = Accuracy(num_classes=11)
         self.init_model()
 
     def init_model(self):
@@ -34,7 +33,8 @@ class GenericNet(LightningModule):
         loss = self.loss(logits, y.long())
 
         y_hat = torch.argmax(logits, dim=1)
-        acc = self.accuracy(y.flatten(), y_hat.flatten())
+        y_flat = y.flatten()
+        acc = (y.flatten() == y_hat.flatten()).sum() / y_flat.shape[0]
 
         # self.logger.log_metrics({f'loss_{phase}': loss, f'acc_{phase}': acc}, step=self.trainer.global_step)
 

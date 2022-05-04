@@ -49,10 +49,10 @@ def train(config_name, resume=False, version=0, batch=None, check_path=None):
     if resume:
         checkpoint_route = f'{logconf["root"]}/{logconf["name"]}/version_{version}/checkpoints/best.ckpt'
 
-    trainer = Trainer(accelerator='cpu', logger=logger, callbacks=[metric_tracker, checkpoint],
+    trainer = Trainer(accelerator='gpu', logger=logger, callbacks=[metric_tracker, checkpoint],
                       resume_from_checkpoint=checkpoint_route, max_epochs=20)
 
     trainer.fit(model, datamodule=dataset)
 
 
-train('resnet18_simple', resume=False, version=1)
+# train('resnet18_simple', resume=False, version=1)

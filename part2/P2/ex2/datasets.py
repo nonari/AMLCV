@@ -64,6 +64,8 @@ class SegmentationMNIST(Dataset):
         target = self.image_template.detach().clone()
 
         for i in range(self.num_digits[idx]):
+            if self.start_digit[idx] + i >= len(self.mnist):
+                break
             digit, cls = self.mnist[self.start_digit[idx] + i]
             mask = digit > 0
 

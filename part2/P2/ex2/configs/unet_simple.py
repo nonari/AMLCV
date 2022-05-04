@@ -7,7 +7,7 @@ from unet import UNet
 CONFIG = {
     'log': {
         'root': '.tb_logs',
-        'name': 'resnet18_simple'
+        'name': 'unet_simple'
     },
     'dataset': {
         'batch_train': 4,
